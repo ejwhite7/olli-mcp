@@ -11,12 +11,11 @@ export class OlliClient {
       process.exit(1)
     }
     this.apiKey = key
-    this.baseUrl =
-      process.env.OLLI_BASE_URL ?? 'https://api.olli.social/api/v1'
+    this.baseUrl = (process.env.OLLI_BASE_URL ?? 'https://api.olli.social/api/v1').replace(/\/$/, '')
   }
 
   private async request<T>(
-    method: string,
+    method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
     path: string,
     body?: unknown,
   ): Promise<T> {
