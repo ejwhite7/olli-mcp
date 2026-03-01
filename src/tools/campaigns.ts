@@ -11,7 +11,7 @@ export function registerCampaignTools(server: McpServer, client: OlliClient) {
     {
       workspace_id: z.string().describe('Workspace slug or UUID'),
       q: z.string().optional().describe('Search query'),
-      status: z.enum(['draft', 'active', 'paused', 'completed']).optional(),
+      status: z.enum(['draft', 'active', 'completed', 'archived']).optional(),
       team_id: z.string().optional().describe('Filter by team UUID'),
     },
     async ({ workspace_id, ...filters }) => {
@@ -46,7 +46,7 @@ export function registerCampaignTools(server: McpServer, client: OlliClient) {
       title: z.string().describe('Campaign title'),
       description: z.string().optional(),
       purpose: z.enum(['awareness', 'conversion', 'engagement', 'nurture']).optional(),
-      status: z.enum(['draft', 'active', 'paused', 'completed']).optional(),
+      status: z.enum(['draft', 'active', 'completed', 'archived']).optional(),
       campaign_length_type: z.enum(['evergreen', 'custom', 'end_of_week', 'end_of_month', 'end_of_quarter', 'end_of_year', 'days']).optional(),
       campaign_duration_days: z.number().int().optional(),
       start_date: z.string().optional().describe('ISO 8601 date'),
@@ -75,7 +75,7 @@ export function registerCampaignTools(server: McpServer, client: OlliClient) {
       title: z.string().optional(),
       description: z.string().optional(),
       purpose: z.enum(['awareness', 'conversion', 'engagement', 'nurture']).optional(),
-      status: z.enum(['draft', 'active', 'paused', 'completed']).optional(),
+      status: z.enum(['draft', 'active', 'completed', 'archived']).optional(),
       campaign_length_type: z.enum(['evergreen', 'custom', 'end_of_week', 'end_of_month', 'end_of_quarter', 'end_of_year', 'days']).optional(),
       campaign_duration_days: z.number().int().optional(),
       start_date: z.string().optional().describe('ISO 8601 date'),
