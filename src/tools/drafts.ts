@@ -95,7 +95,7 @@ export function registerDraftTools(server: McpServer, client: OlliClient) {
     {
       workspace_id: z.string().describe('Workspace slug or UUID'),
       id: z.string().describe('Draft UUID'),
-      integration_id: z.string().describe('LinkedIn/Twitter integration UUID'),
+      integration_id: z.string().describe('LinkedIn integration UUID'),
       author_type: z.enum(['member', 'organization']).default('member'),
     },
     async ({ workspace_id, id, integration_id, author_type }) => {
@@ -113,7 +113,7 @@ export function registerDraftTools(server: McpServer, client: OlliClient) {
     {
       workspace_id: z.string().describe('Workspace slug or UUID'),
       id: z.string().describe('Draft UUID'),
-      integration_id: z.string().describe('LinkedIn/Twitter integration UUID'),
+      integration_id: z.string().describe('LinkedIn integration UUID'),
       scheduled_for: z.string().describe('ISO 8601 datetime to publish at'),
       author_type: z.enum(['member', 'organization']).default('member'),
     },

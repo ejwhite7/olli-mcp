@@ -49,7 +49,7 @@ export function registerCalendarTools(server: McpServer, client: OlliClient) {
       platform: z.enum(PLATFORMS).optional(),
       scheduled_for: z.string().describe('ISO 8601 datetime'),
       campaign_id: z.string().optional(),
-      status: z.string().optional(),
+      status: z.enum(['scheduled', 'published', 'failed']).optional(),
       notes: z.string().optional(),
     },
     async ({ workspace_id, ...params }) => {
@@ -69,7 +69,7 @@ export function registerCalendarTools(server: McpServer, client: OlliClient) {
       platform: z.enum(PLATFORMS).optional(),
       scheduled_for: z.string().optional().describe('ISO 8601 datetime'),
       campaign_id: z.string().optional(),
-      status: z.string().optional(),
+      status: z.enum(['scheduled', 'published', 'failed']).optional(),
       notes: z.string().optional(),
     },
     async ({ workspace_id, id, ...params }) => {

@@ -36,4 +36,7 @@ registerLeaderboardTools(server, client)
 registerAiTools(server, client)
 
 const transport = new StdioServerTransport()
-await server.connect(transport)
+server.connect(transport).catch((err) => {
+  console.error('Fatal MCP error:', err)
+  process.exit(1)
+})
