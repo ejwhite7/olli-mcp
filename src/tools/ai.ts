@@ -1,12 +1,9 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import type { OlliClient } from '../client.js'
+import { PLATFORMS, TONES, LENGTHS } from '../constants.js'
 
 const aiBase = (workspaceId: string) => `/workspaces/${workspaceId}/ai`
-
-const PLATFORMS = ['linkedin', 'twitter', 'instagram', 'facebook'] as const
-const TONES = ['professional', 'casual', 'inspirational', 'educational', 'promotional'] as const
-const LENGTHS = ['short', 'medium', 'long'] as const
 
 export function registerAiTools(server: McpServer, client: OlliClient) {
   server.tool(

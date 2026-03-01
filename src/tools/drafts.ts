@@ -1,10 +1,9 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import type { OlliClient } from '../client.js'
+import { PLATFORMS } from '../constants.js'
 
 const base = (workspaceId: string) => `/workspaces/${workspaceId}/drafts`
-
-const PLATFORMS = ['linkedin', 'twitter', 'instagram', 'facebook'] as const
 
 export function registerDraftTools(server: McpServer, client: OlliClient) {
   server.tool(
@@ -49,7 +48,7 @@ export function registerDraftTools(server: McpServer, client: OlliClient) {
       campaign_id: z.string().optional().describe('Campaign UUID'),
       status: z.enum(['draft', 'ready', 'scheduled', 'published']).optional(),
       notes: z.string().optional(),
-      media_url: z.string().optional(),
+      media_url: z.string().url().optional(),
     },
     async ({ workspace_id, ...params }) => {
       const data = await client.post(base(workspace_id), { draft: params })
@@ -69,7 +68,7 @@ export function registerDraftTools(server: McpServer, client: OlliClient) {
       campaign_id: z.string().optional(),
       status: z.enum(['draft', 'ready', 'scheduled', 'published']).optional(),
       notes: z.string().optional(),
-      media_url: z.string().optional(),
+      media_url: z.string().url().optional(),
     },
     async ({ workspace_id, id, ...params }) => {
       const data = await client.patch(`${base(workspace_id)}/${id}`, { draft: params })

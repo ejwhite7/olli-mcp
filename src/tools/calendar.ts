@@ -1,10 +1,9 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import type { OlliClient } from '../client.js'
+import { PLATFORMS } from '../constants.js'
 
 const base = (workspaceId: string) => `/workspaces/${workspaceId}/calendar_events`
-
-const PLATFORMS = ['linkedin', 'twitter', 'instagram', 'facebook'] as const
 
 export function registerCalendarTools(server: McpServer, client: OlliClient) {
   server.tool(

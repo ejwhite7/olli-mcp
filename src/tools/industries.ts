@@ -13,7 +13,10 @@ export function registerIndustryTools(server: McpServer, client: OlliClient) {
       q: z.string().optional().describe('Search query'),
     },
     async ({ workspace_id, q }) => {
-      const qs = q ? `?q=${encodeURIComponent(q)}` : ''
+      const params = new URLSearchParams(
+        Object.entries({ q }).filter(([, v]) => v !== undefined) as [string, string][],
+      )
+      const qs = params.size ? `?${params}` : ''
       const data = await client.get(`${base(workspace_id)}${qs}`)
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
     },

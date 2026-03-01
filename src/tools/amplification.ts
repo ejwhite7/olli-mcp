@@ -10,9 +10,15 @@ export function registerAmplificationTools(server: McpServer, client: OlliClient
     'List amplification posts (posts queued for team amplification)',
     {
       workspace_id: z.string().describe('Workspace slug or UUID'),
+      platform: z.enum(['linkedin', 'twitter']).optional().describe('Filter by platform'),
+      user_id: z.string().optional().describe('Filter by submitting user UUID'),
     },
-    async ({ workspace_id }) => {
-      const data = await client.get(base(workspace_id))
+    async ({ workspace_id, ...filters }) => {
+      const params = new URLSearchParams(
+        Object.entries(filters).filter(([, v]) => v !== undefined) as [string, string][],
+      )
+      const qs = params.size ? `?${params}` : ''
+      const data = await client.get(`${base(workspace_id)}${qs}`)
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
     },
   )
