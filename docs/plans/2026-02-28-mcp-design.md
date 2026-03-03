@@ -48,7 +48,7 @@ olli-mcp/
 | Env var | Required | Default |
 |---|---|---|
 | `OLLI_API_KEY` | Yes | — |
-| `OLLI_BASE_URL` | No | `https://api.olli.social/api/v1` |
+| `OLLI_BASE_URL` | No | `https://api.olli.social/v1` |
 
 Startup fails with a clear error if `OLLI_API_KEY` is missing.
 
@@ -94,7 +94,7 @@ All workspace-scoped tools require a `workspace_id` string parameter (workspace 
       "args": ["-y", "@olli/mcp-server"],
       "env": {
         "OLLI_API_KEY": "olli_sk_your_key_here",
-        "OLLI_BASE_URL": "http://localhost:3000/api/v1"
+        "OLLI_BASE_URL": "http://localhost:3000/v1"
       }
     }
   }

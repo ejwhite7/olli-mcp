@@ -27,7 +27,7 @@ Generate an API key in your olli.social profile settings under **API Keys**.
 | Variable | Required | Default |
 |---|---|---|
 | `OLLI_API_KEY` | Yes | — |
-| `OLLI_BASE_URL` | No | `https://api.olli.social/api/v1` |
+| `OLLI_BASE_URL` | No | `https://api.olli.social/v1` |
 
 ## Tools (43)
 

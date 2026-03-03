@@ -84,7 +84,7 @@ Create `package.json`:
 
 ```
 OLLI_API_KEY=olli_sk_your_key_here
-OLLI_BASE_URL=https://api.olli.social/api/v1
+OLLI_BASE_URL=https://api.olli.social/v1
 ```
 
 **Step 4: Create .gitignore**
@@ -152,7 +152,7 @@ export class OlliClient {
     }
     this.apiKey = key
     this.baseUrl =
-      process.env.OLLI_BASE_URL ?? 'https://api.olli.social/api/v1'
+      process.env.OLLI_BASE_URL ?? 'https://api.olli.social/v1'
   }
 
   private async request<T>(
@@ -1313,7 +1313,7 @@ Generate an API key in your olli.social profile settings under **API Keys**.
 | Variable | Required | Default |
 |---|---|---|
 | `OLLI_API_KEY` | Yes | — |
-| `OLLI_BASE_URL` | No | `https://api.olli.social/api/v1` |
+| `OLLI_BASE_URL` | No | `https://api.olli.social/v1` |
 
 ## Tools (30)
 
