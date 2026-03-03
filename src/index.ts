@@ -2,6 +2,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { OlliClient } from './client.js'
+import { registerWorkspaceTools } from './tools/workspaces.js'
 import { registerCampaignTools } from './tools/campaigns.js'
 import { registerDraftTools } from './tools/drafts.js'
 import { registerCalendarTools } from './tools/calendar.js'
@@ -14,14 +15,19 @@ import { registerAnalyticsTools } from './tools/analytics.js'
 import { registerAmplificationTools } from './tools/amplification.js'
 import { registerLeaderboardTools } from './tools/leaderboard.js'
 import { registerAiTools } from './tools/ai.js'
+import { registerNotificationTools } from './tools/notifications.js'
+import { registerIntegrationTools } from './tools/integrations.js'
+import { registerSupportTools } from './tools/support.js'
+import { registerBillingTools } from './tools/billing.js'
 
 const server = new McpServer({
   name: 'olli',
-  version: '0.1.0',
+  version: '0.2.0',
 })
 
 const client = new OlliClient()
 
+registerWorkspaceTools(server, client)
 registerCampaignTools(server, client)
 registerDraftTools(server, client)
 registerCalendarTools(server, client)
@@ -34,6 +40,10 @@ registerAnalyticsTools(server, client)
 registerAmplificationTools(server, client)
 registerLeaderboardTools(server, client)
 registerAiTools(server, client)
+registerNotificationTools(server, client)
+registerIntegrationTools(server, client)
+registerSupportTools(server, client)
+registerBillingTools(server, client)
 
 const transport = new StdioServerTransport()
 server.connect(transport).catch((err) => {

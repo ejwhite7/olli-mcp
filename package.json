@@ -1,7 +1,7 @@
 {
   "name": "@olli/mcp-server",
-  "version": "0.1.0",
-  "description": "MCP server for olli.social",
+  "version": "0.2.0",
+  "description": "MCP server for olli.social — AI-powered social media management platform",
   "type": "module",
   "bin": {
     "olli-mcp": "./dist/index.js"
@@ -11,7 +11,8 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --clean",
     "dev": "tsx src/index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
@@ -23,9 +24,17 @@
     "typescript": "^5.4.0",
     "@types/node": "^20.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ejwhite7/olli-mcp.git"
+  },
+  "homepage": "https://github.com/ejwhite7/olli-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/ejwhite7/olli-mcp/issues"
+  },
   "engines": {
     "node": ">=20"
   },
   "license": "MIT",
-  "keywords": ["mcp", "olli", "social-media", "linkedin", "ai"]
+  "keywords": ["mcp", "model-context-protocol", "olli", "social-media", "linkedin", "ai", "claude"]
 }

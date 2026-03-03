@@ -24,6 +24,19 @@ export function registerAmplificationTools(server: McpServer, client: OlliClient
   )
 
   server.tool(
+    'get_amplification_post',
+    'Get details of an amplification post',
+    {
+      workspace_id: z.string().describe('Workspace slug or UUID'),
+      id: z.string().describe('Amplification post UUID'),
+    },
+    async ({ workspace_id, id }) => {
+      const data = await client.get(`${base(workspace_id)}/${id}`)
+      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
+    },
+  )
+
+  server.tool(
     'create_amplification_post',
     'Add a post to the amplification queue for team sharing',
     {
@@ -37,6 +50,19 @@ export function registerAmplificationTools(server: McpServer, client: OlliClient
     async ({ workspace_id, ...params }) => {
       const data = await client.post(base(workspace_id), { amplification_post: params })
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
+    },
+  )
+
+  server.tool(
+    'delete_amplification_post',
+    'Remove a post from the amplification queue',
+    {
+      workspace_id: z.string().describe('Workspace slug or UUID'),
+      id: z.string().describe('Amplification post UUID'),
+    },
+    async ({ workspace_id, id }) => {
+      await client.delete(`${base(workspace_id)}/${id}`)
+      return { content: [{ type: 'text', text: 'Amplification post deleted.' }] }
     },
   )
 }
