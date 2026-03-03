@@ -1,4 +1,4 @@
-# @olli/mcp-server
+# @b2b-saas-inc/olli-mcp-server
 
 MCP server for [olli.social](https://olli.social) — lets LLMs manage your social presence via API key.
 
@@ -11,7 +11,7 @@ Add to your Claude Desktop (or other MCP client) config:
   "mcpServers": {
     "olli": {
       "command": "npx",
-      "args": ["-y", "@olli/mcp-server"],
+      "args": ["-y", "@b2b-saas-inc/olli-mcp-server"],
       "env": {
         "OLLI_API_KEY": "olli_sk_your_key_here"
       }

@@ -1,5 +1,5 @@
 {
-  "name": "@olli/mcp-server",
+  "name": "@b2b-saas-inc/olli-mcp-server",
   "version": "0.2.0",
   "description": "MCP server for olli.social — AI-powered social media management platform",
   "type": "module",
