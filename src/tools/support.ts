@@ -7,12 +7,18 @@ const base = (workspaceId: string) => `/workspaces/${workspaceId}/support_ticket
 export function registerSupportTools(server: McpServer, client: OlliClient) {
   server.tool(
     'list_support_tickets',
-    'List support tickets for a workspace',
+    'List support tickets for a workspace. Supports pagination.',
     {
       workspace_id: z.string().describe('Workspace slug or UUID'),
+      page: z.number().optional().describe('Page number (default: 1)'),
+      per_page: z.number().optional().describe('Results per page (default: 25, max: 100)'),
     },
-    async ({ workspace_id }) => {
-      const data = await client.get(base(workspace_id))
+    async ({ workspace_id, page, per_page }) => {
+      const params = new URLSearchParams()
+      if (page !== undefined) params.set('page', String(page))
+      if (per_page !== undefined) params.set('per_page', String(Math.min(per_page, 100)))
+      const qs = params.size ? `?${params}` : ''
+      const data = await client.get(`${base(workspace_id)}${qs}`)
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
     },
   )
@@ -48,13 +54,19 @@ export function registerSupportTools(server: McpServer, client: OlliClient) {
 
   server.tool(
     'list_ticket_messages',
-    'List messages on a support ticket',
+    'List messages on a support ticket. Supports pagination.',
     {
       workspace_id: z.string().describe('Workspace slug or UUID'),
       ticket_id: z.string().describe('Support ticket UUID'),
+      page: z.number().optional().describe('Page number (default: 1)'),
+      per_page: z.number().optional().describe('Results per page (default: 25, max: 100)'),
     },
-    async ({ workspace_id, ticket_id }) => {
-      const data = await client.get(`${base(workspace_id)}/${ticket_id}/messages`)
+    async ({ workspace_id, ticket_id, page, per_page }) => {
+      const params = new URLSearchParams()
+      if (page !== undefined) params.set('page', String(page))
+      if (per_page !== undefined) params.set('per_page', String(Math.min(per_page, 100)))
+      const qs = params.size ? `?${params}` : ''
+      const data = await client.get(`${base(workspace_id)}/${ticket_id}/messages${qs}`)
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
     },
   )

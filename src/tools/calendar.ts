@@ -8,18 +8,22 @@ const base = (workspaceId: string) => `/workspaces/${workspaceId}/calendar_event
 export function registerCalendarTools(server: McpServer, client: OlliClient) {
   server.tool(
     'list_calendar_events',
-    'List calendar events in a workspace',
+    'List calendar events in a workspace. Supports pagination.',
     {
       workspace_id: z.string().describe('Workspace slug or UUID'),
       platform: z.enum(PLATFORMS).optional(),
       status: z.string().optional(),
       start_date: z.string().optional().describe('ISO 8601 date filter start'),
       end_date: z.string().optional().describe('ISO 8601 date filter end'),
+      page: z.number().optional().describe('Page number (default: 1)'),
+      per_page: z.number().optional().describe('Results per page (default: 25, max: 100)'),
     },
-    async ({ workspace_id, ...filters }) => {
+    async ({ workspace_id, page, per_page, ...filters }) => {
       const params = new URLSearchParams(
         Object.entries(filters).filter(([, v]) => v !== undefined) as [string, string][],
       )
+      if (page !== undefined) params.set('page', String(page))
+      if (per_page !== undefined) params.set('per_page', String(Math.min(per_page, 100)))
       const qs = params.size ? `?${params}` : ''
       const data = await client.get(`${base(workspace_id)}${qs}`)
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }

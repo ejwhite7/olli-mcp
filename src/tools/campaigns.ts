@@ -7,18 +7,22 @@ const base = (workspaceId: string) => `/workspaces/${workspaceId}/campaigns`
 export function registerCampaignTools(server: McpServer, client: OlliClient) {
   server.tool(
     'list_campaigns',
-    'List all campaigns in a workspace',
+    'List all campaigns in a workspace. Supports pagination.',
     {
       workspace_id: z.string().describe('Workspace slug or UUID'),
       q: z.string().optional().describe('Search query'),
       status: z.enum(['draft', 'active', 'completed', 'archived']).optional(),
       team_id: z.string().optional().describe('Filter by team UUID'),
+      page: z.number().optional().describe('Page number (default: 1)'),
+      per_page: z.number().optional().describe('Results per page (default: 25, max: 100)'),
     },
-    async ({ workspace_id, ...filters }) => {
+    async ({ workspace_id, page, per_page, ...filters }) => {
       const params = new URLSearchParams()
       if (filters.q) params.set('q', filters.q)
       if (filters.status) params.set('status', filters.status)
       if (filters.team_id) params.set('team_id', filters.team_id)
+      if (page !== undefined) params.set('page', String(page))
+      if (per_page !== undefined) params.set('per_page', String(Math.min(per_page, 100)))
       const query = params.toString()
       const data = await client.get(`${base(workspace_id)}${query ? `?${query}` : ''}`)
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }

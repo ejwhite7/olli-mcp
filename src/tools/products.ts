@@ -7,12 +7,18 @@ const base = (workspaceId: string) => `/workspaces/${workspaceId}/products`
 export function registerProductTools(server: McpServer, client: OlliClient) {
   server.tool(
     'list_products',
-    'List products in a workspace',
+    'List products in a workspace. Supports pagination.',
     {
       workspace_id: z.string().describe('Workspace slug or UUID'),
+      page: z.number().optional().describe('Page number (default: 1)'),
+      per_page: z.number().optional().describe('Results per page (default: 25, max: 100)'),
     },
-    async ({ workspace_id }) => {
-      const data = await client.get(base(workspace_id))
+    async ({ workspace_id, page, per_page }) => {
+      const params = new URLSearchParams()
+      if (page !== undefined) params.set('page', String(page))
+      if (per_page !== undefined) params.set('per_page', String(Math.min(per_page, 100)))
+      const qs = params.size ? `?${params}` : ''
+      const data = await client.get(`${base(workspace_id)}${qs}`)
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
     },
   )
