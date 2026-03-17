@@ -7,17 +7,21 @@ const base = (workspaceId: string) => `/workspaces/${workspaceId}/assets`
 export function registerAssetTools(server: McpServer, client: OlliClient) {
   server.tool(
     'list_assets',
-    'List assets in the workspace library',
+    'List assets in the workspace library. Supports pagination.',
     {
       workspace_id: z.string().describe('Workspace slug or UUID'),
       type: z.string().optional().describe('Filter by asset_type'),
       tag: z.string().optional().describe('Filter by tag'),
       q: z.string().optional().describe('Search query'),
+      page: z.number().optional().describe('Page number (default: 1)'),
+      per_page: z.number().optional().describe('Results per page (default: 25, max: 100)'),
     },
-    async ({ workspace_id, ...filters }) => {
+    async ({ workspace_id, page, per_page, ...filters }) => {
       const params = new URLSearchParams(
         Object.entries(filters).filter(([, v]) => v !== undefined) as [string, string][],
       )
+      if (page !== undefined) params.set('page', String(page))
+      if (per_page !== undefined) params.set('per_page', String(Math.min(per_page, 100)))
       const qs = params.size ? `?${params}` : ''
       const data = await client.get(`${base(workspace_id)}${qs}`)
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }

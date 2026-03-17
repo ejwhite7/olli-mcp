@@ -123,12 +123,18 @@ export function registerAiTools(server: McpServer, client: OlliClient) {
 
   server.tool(
     'list_avatar_conversations',
-    'List avatar chat conversations',
+    'List avatar chat conversations. Supports pagination.',
     {
       workspace_id: z.string().describe('Workspace slug or UUID'),
+      page: z.number().optional().describe('Page number (default: 1)'),
+      per_page: z.number().optional().describe('Results per page (default: 25, max: 100)'),
     },
-    async ({ workspace_id }) => {
-      const data = await client.get(`${aiBase(workspace_id)}/avatar/conversations`)
+    async ({ workspace_id, page, per_page }) => {
+      const params = new URLSearchParams()
+      if (page !== undefined) params.set('page', String(page))
+      if (per_page !== undefined) params.set('per_page', String(Math.min(per_page, 100)))
+      const qs = params.size ? `?${params}` : ''
+      const data = await client.get(`${aiBase(workspace_id)}/avatar/conversations${qs}`)
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
     },
   )
