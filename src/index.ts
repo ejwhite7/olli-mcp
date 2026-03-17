@@ -19,10 +19,13 @@ import { registerNotificationTools } from './tools/notifications.js'
 import { registerIntegrationTools } from './tools/integrations.js'
 import { registerSupportTools } from './tools/support.js'
 import { registerBillingTools } from './tools/billing.js'
+import { registerPixelTools } from './tools/pixel.js'
+import { registerRssTools } from './tools/rss.js'
+import { registerTrackedProfileTools } from './tools/tracked_profiles.js'
 
 const server = new McpServer({
   name: 'olli',
-  version: '0.2.0',
+  version: '0.3.0',
 })
 
 const client = new OlliClient()
@@ -44,6 +47,9 @@ registerNotificationTools(server, client)
 registerIntegrationTools(server, client)
 registerSupportTools(server, client)
 registerBillingTools(server, client)
+registerPixelTools(server, client)
+registerRssTools(server, client)
+registerTrackedProfileTools(server, client)
 
 const transport = new StdioServerTransport()
 server.connect(transport).catch((err) => {
