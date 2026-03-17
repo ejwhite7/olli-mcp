@@ -34,4 +34,38 @@ export function registerBillingTools(server: McpServer, client: OlliClient) {
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
     },
   )
+
+  // -- Usage Tracking --
+
+  server.tool(
+    'check_feature_usage',
+    'Check remaining usage allowance for a feature (e.g., AI generations, posts)',
+    {
+      workspace_id: z.string().describe('Workspace slug or UUID'),
+      feature: z.string().describe('Feature name to check (e.g., "ai_generation", "post_publish")'),
+    },
+    async ({ workspace_id, feature }) => {
+      const data = await client.get(
+        `/workspaces/${workspace_id}/usage/check?feature=${encodeURIComponent(feature)}`,
+      )
+      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
+    },
+  )
+
+  server.tool(
+    'track_feature_usage',
+    'Record usage of a feature for quota tracking',
+    {
+      workspace_id: z.string().describe('Workspace slug or UUID'),
+      feature: z.string().describe('Feature name'),
+      quantity: z.number().optional().describe('Usage quantity (default: 1)'),
+    },
+    async ({ workspace_id, feature, quantity }) => {
+      const data = await client.post(
+        `/workspaces/${workspace_id}/usage/track`,
+        { feature, quantity: quantity ?? 1 },
+      )
+      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
+    },
+  )
 }

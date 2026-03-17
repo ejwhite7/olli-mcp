@@ -167,4 +167,81 @@ export function registerWorkspaceTools(server: McpServer, client: OlliClient) {
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
     },
   )
+
+  // -- Domain Verification --
+
+  server.tool(
+    'create_domain_verification',
+    'Start domain verification for a workspace (generates DNS/meta tag verification record)',
+    {
+      workspace_id: z.string().describe('Workspace slug or UUID'),
+      domain: z.string().describe('Domain to verify (e.g., example.com)'),
+    },
+    async ({ workspace_id, domain }) => {
+      const data = await client.post(
+        `/workspaces/${workspace_id}/domain_verification`,
+        { domain },
+      )
+      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
+    },
+  )
+
+  server.tool(
+    'get_domain_verification',
+    'Check domain verification status',
+    {
+      workspace_id: z.string().describe('Workspace slug or UUID'),
+    },
+    async ({ workspace_id }) => {
+      const data = await client.get(
+        `/workspaces/${workspace_id}/domain_verification`,
+      )
+      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
+    },
+  )
+
+  server.tool(
+    'verify_domain',
+    'Trigger domain verification check (after DNS/meta tag has been set up)',
+    {
+      workspace_id: z.string().describe('Workspace slug or UUID'),
+    },
+    async ({ workspace_id }) => {
+      const data = await client.post(
+        `/workspaces/${workspace_id}/domain_verification/verify`,
+        {},
+      )
+      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
+    },
+  )
+
+  // -- Onboarding --
+
+  server.tool(
+    'get_onboarding_status',
+    'View onboarding progress and completion status for a workspace',
+    {
+      workspace_id: z.string().describe('Workspace slug or UUID'),
+    },
+    async ({ workspace_id }) => {
+      const data = await client.get(
+        `/workspaces/${workspace_id}/onboarding`,
+      )
+      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
+    },
+  )
+
+  server.tool(
+    'get_checklist',
+    'Get the onboarding checklist with completion status for each item',
+    {
+      workspace_id: z.string().describe('Workspace slug or UUID'),
+    },
+    async ({ workspace_id }) => {
+      const data = await client.get(
+        `/workspaces/${workspace_id}/checklist`,
+      )
+      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
+    },
+  )
 }
