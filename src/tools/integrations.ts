@@ -81,4 +81,35 @@ export function registerIntegrationTools(server: McpServer, client: OlliClient) 
       return { content: [{ type: 'text', text: `${platform} disconnected.` }] }
     },
   )
+
+  // -- Twitter/X Integration --
+
+  server.tool(
+    'sync_twitter',
+    'Trigger a Twitter/X data sync for a workspace',
+    {
+      workspace_id: z.string().describe('Workspace slug or UUID'),
+    },
+    async ({ workspace_id }) => {
+      const data = await client.post(
+        `/workspaces/${workspace_id}/integrations/twitter/sync`,
+        {},
+      )
+      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
+    },
+  )
+
+  server.tool(
+    'get_twitter_analytics',
+    'Get Twitter/X integration analytics',
+    {
+      workspace_id: z.string().describe('Workspace slug or UUID'),
+    },
+    async ({ workspace_id }) => {
+      const data = await client.get(
+        `/workspaces/${workspace_id}/integrations/twitter/analytics`,
+      )
+      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] }
+    },
+  )
 }

@@ -22,6 +22,9 @@ import { registerBillingTools } from './tools/billing.js'
 import { registerPixelTools } from './tools/pixel.js'
 import { registerRssTools } from './tools/rss.js'
 import { registerTrackedProfileTools } from './tools/tracked_profiles.js'
+import { registerSettingsTools } from './tools/settings.js'
+import { registerGamificationTools } from './tools/gamification.js'
+import { registerContentConfigTools } from './tools/content_config.js'
 
 const server = new McpServer({
   name: 'olli',
@@ -50,6 +53,9 @@ registerBillingTools(server, client)
 registerPixelTools(server, client)
 registerRssTools(server, client)
 registerTrackedProfileTools(server, client)
+registerSettingsTools(server, client)
+registerGamificationTools(server, client)
+registerContentConfigTools(server, client)
 
 const transport = new StdioServerTransport()
 server.connect(transport).catch((err) => {
