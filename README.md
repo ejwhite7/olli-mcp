@@ -64,3 +64,43 @@ npm run build
 ## License
 
 MIT
+
+## Schema Sync
+
+Avatar tool schemas are sourced from `olli-social-app`'s `AvatarToolRegistry` — the single source of truth for all 34 avatar AI tool definitions. Instead of maintaining duplicate schemas in TypeScript, this MCP server imports them as JSON.
+
+### How it works
+
+1. The Rails app exposes `GET /api/v1/ai/avatar_schemas` (protected by shared secret)
+2. Running `npm run sync-schemas` fetches the schemas and writes them to `src/generated/avatar-schemas.json`
+3. At startup, the MCP server reads this JSON file and dynamically registers avatar tools
+4. Each avatar tool proxies execution back to the Rails avatar endpoint
+
+### Setup
+
+Add these variables to your `.env` file:
+
+```env
+MCP_RAILS_URL=https://api.olli.social
+MCP_SHARED_SECRET=your_shared_secret_here
+```
+
+`MCP_RAILS_URL` is the base URL of your olli-social-app Rails server.  
+`MCP_SHARED_SECRET` must match the `MCP_SHARED_SECRET` environment variable on the Rails side.
+
+### Syncing schemas
+
+```bash
+# Pull latest avatar tool schemas from Rails
+npm run sync-schemas
+```
+
+The output file `src/generated/avatar-schemas.json` is committed to the repo for reproducible builds. Re-run the sync whenever avatar tool definitions change in the Rails app (i.e., when `AvatarToolRegistry::SCHEMA_VERSION` is bumped).
+
+### Adding new avatar tools
+
+New avatar tools should be added to `AvatarToolRegistry` in `olli-social-app` — never directly in this MCP server. After adding tools in Rails:
+
+1. Bump `SCHEMA_VERSION` in `avatar_tool_registry.rb`
+2. Run `npm run sync-schemas` in this repo
+3. Commit the updated `avatar-schemas.json`
