@@ -1,18 +1,21 @@
 {
   "name": "@b2b-saas-inc/olli-mcp-server",
   "version": "0.2.0",
-  "description": "MCP server for olli.social — AI-powered social media management platform",
+  "description": "MCP server for olli.social \u2014 AI-powered social media management platform",
   "type": "module",
   "bin": {
     "olli-mcp": "./dist/index.js"
   },
   "main": "./dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --clean",
     "dev": "tsx src/index.ts",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "sync-schemas": "tsx src/schema-sync.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
@@ -36,5 +39,13 @@
     "node": ">=20"
   },
   "license": "MIT",
-  "keywords": ["mcp", "model-context-protocol", "olli", "social-media", "linkedin", "ai", "claude"]
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "olli",
+    "social-media",
+    "linkedin",
+    "ai",
+    "claude"
+  ]
 }

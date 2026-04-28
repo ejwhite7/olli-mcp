@@ -25,6 +25,7 @@ import { registerTrackedProfileTools } from './tools/tracked_profiles.js'
 import { registerSettingsTools } from './tools/settings.js'
 import { registerGamificationTools } from './tools/gamification.js'
 import { registerContentConfigTools } from './tools/content_config.js'
+import { registerAvatarTools } from './tools/avatar.js'
 
 const server = new McpServer({
   name: 'olli',
@@ -56,6 +57,11 @@ registerTrackedProfileTools(server, client)
 registerSettingsTools(server, client)
 registerGamificationTools(server, client)
 registerContentConfigTools(server, client)
+
+// Register avatar tools dynamically from synced schemas (source of truth: AvatarToolRegistry in Rails).
+// These tools are loaded from src/generated/avatar-schemas.json — run `npm run sync-schemas` to update.
+// If the schemas file is missing, avatar tools are simply skipped (non-breaking).
+registerAvatarTools(server, client)
 
 const transport = new StdioServerTransport()
 server.connect(transport).catch((err) => {
